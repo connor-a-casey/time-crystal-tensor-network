@@ -23,26 +23,30 @@ class TEBDEvolution:
     with support for custom Hamiltonians and truncation parameters.
     """
     
-    def __init__(self, model, dt: float = 0.1, trunc_params: Dict = None):
+    def __init__(self, model, dt: float = 0.1, max_chi: int = 100, trunc_params: Dict = None):
         """
         Initialize TEBD evolution.
         
         Args:
             model: TeNPy model or custom model with gate structure
             dt: Time step
+            max_chi: Maximum bond dimension
             trunc_params: Truncation parameters for TEBD
         """
         self.model = model
         self.dt = dt
+        self.max_chi = max_chi
         
         if trunc_params is None:
             self.trunc_params = {
-                'chi_max': 100,
+                'chi_max': max_chi,
                 'svd_min': 1e-12,
                 'trunc_cut': 1e-10
             }
         else:
             self.trunc_params = trunc_params
+            if 'chi_max' not in self.trunc_params:
+                self.trunc_params['chi_max'] = max_chi
     
     def evolve(self, psi_initial: MPS, total_time: float, 
                observe_every: int = 1) -> Tuple[List[MPS], List[float], Dict]:
@@ -173,6 +177,18 @@ class TEBDEvolution:
             'memory_usage': sum(info['bond_dimensions']) * 8 / 1024**2,  # Rough estimate in MB
             'truncation_error': info['truncation_errors'][-1] if info['truncation_errors'] else 0
         }
+    
+    def evolve_floquet_period(self, psi: MPS) -> MPS:
+        """
+        Evolve one Floquet period using the model's floquet_step method.
+        
+        Args:
+            psi: Input MPS state
+            
+        Returns:
+            MPS after one Floquet period
+        """
+        return self.model.floquet_step(psi, self.trunc_params)
 
 
 class CustomFloquet:
@@ -217,7 +233,7 @@ class CustomFloquet:
         """
         states = [psi_initial.copy()]
         times = [0.0]
-        bond_dims = [psi_initial.chi]
+        bond_dims = [max(psi_initial.chi) if psi_initial.chi else 1]
         
         psi_current = psi_initial.copy()
         
@@ -231,7 +247,7 @@ class CustomFloquet:
             if period % measure_every == 0:
                 states.append(psi_current.copy())
                 times.append((period + 1) * 2 * self.model.tau)
-                bond_dims.append(psi_current.chi)
+                bond_dims.append(max(psi_current.chi) if psi_current.chi else 1)
         
         wall_time = time.time() - start_time
         
@@ -239,7 +255,7 @@ class CustomFloquet:
             'wall_time': wall_time,
             'bond_dimensions': bond_dims,
             'periods_per_second': n_periods / wall_time,
-            'final_bond_dim': psi_current.chi,
+            'final_bond_dim': max(psi_current.chi) if psi_current.chi else 1,
             'n_periods': n_periods
         }
         

@@ -86,10 +86,16 @@ def apply_two_site_gate(psi: MPS, gate: np.ndarray, i: int, j: int,
     if i > j:
         i, j = j, i
     
+    # Get proper leg charges from the sites
+    site_leg = psi.sites[0].leg
+    leg_in = site_leg
+    leg_out = site_leg.conj()
+    
     # Convert gate to TeNPy format
     gate_tensor = npc.Array.from_ndarray(
         gate.reshape(2, 2, 2, 2), 
-        labels=['p0', 'p1', 'p0*', 'p1*']
+        labels=['p0', 'p1', 'p0*', 'p1*'],
+        legcharges=[leg_in, leg_in, leg_out, leg_out]
     )
     
     # Apply gate using TeNPy's built-in function

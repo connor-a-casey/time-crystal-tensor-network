@@ -160,10 +160,16 @@ class KickedIsingModel:
     def _apply_two_site_gate(self, psi: MPS, gate: np.ndarray, bond_idx: int, 
                             trunc_params: Dict) -> MPS:
         """Apply a two-site gate using TeNPy's built-in methods."""
+        # Get proper leg charges from the sites
+        site_leg = psi.sites[0].leg
+        leg_in = site_leg
+        leg_out = site_leg.conj()
+        
         # Convert gate to TeNPy format
         gate_tensor = npc.Array.from_ndarray(
             gate.reshape(2, 2, 2, 2), 
-            labels=['p0', 'p1', 'p0*', 'p1*']
+            labels=['p0', 'p1', 'p0*', 'p1*'],
+            legcharges=[leg_in, leg_in, leg_out, leg_out]
         )
         
         # Apply gate
@@ -181,8 +187,17 @@ class KickedIsingModel:
     
     def _apply_single_site_gate(self, psi: MPS, gate: np.ndarray, site: int) -> MPS:
         """Apply a single-site gate."""
+        # Get proper leg charges from the site
+        site_leg = psi.sites[0].leg
+        leg_in = site_leg
+        leg_out = site_leg.conj()
+        
         # Convert gate to TeNPy format
-        gate_tensor = npc.Array.from_ndarray(gate, labels=['p', 'p*'])
+        gate_tensor = npc.Array.from_ndarray(
+            gate, 
+            labels=['p', 'p*'], 
+            legcharges=[leg_in, leg_out]
+        )
         
         # Apply gate
         psi_new = psi.copy()
@@ -280,7 +295,7 @@ class KickedIsingModel:
             'loschmidt_echo_final': loschmidt_echoes[-1],
             'subharmonic_amplitude': subharm_amp,
             'fundamental_amplitude': fund_amp,
-            'order_parameter': order_param,
-            'max_bond_dimension': max(psi.chi),
-            'final_magnetization': magnetizations[-1]
+                         'order_parameter': order_param,
+             'max_bond_dimension': max(states[-1].chi) if states[-1].chi else 1,
+             'final_magnetization': magnetizations[-1]
         } 

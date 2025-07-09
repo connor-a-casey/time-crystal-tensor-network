@@ -19,12 +19,10 @@ time-crystal-tensor-network/
 ├── src/
 │   ├── core/                 # Core tensor network implementations
 │   ├── models/               # Physical models (kicked-Ising, etc.)
-│   ├── dynamics/             # Time evolution algorithms
-│   ├── analysis/             # Analysis tools and metrics
-│   └── benchmarks/           # Performance benchmarking
+│   └── dynamics/             # Time evolution algorithms
 ├── notebooks/                # Jupyter notebooks for examples
+├── examples/                 # Example scripts and demos
 ├── tests/                    # Unit tests
-├── data/                     # Generated data and results
 ├── figures/                  # Generated plots and figures
 └── requirements.txt          # Python dependencies
 ```

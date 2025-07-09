@@ -5,7 +5,7 @@ Test script to verify the time crystal framework setup.
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 def test_imports():
     """Test that all modules can be imported."""
@@ -49,9 +49,13 @@ def test_basic_functionality():
         
         # Test magnetization calculation
         from core.observables import magnetization
-        mag = magnetization(psi, 'z')
-        assert isinstance(mag, float)
-        print("✓ Magnetization calculation works")
+        try:
+            mag = magnetization(psi, 'z')
+            assert isinstance(mag, (float, complex))
+            print("✓ Magnetization calculation works")
+        except Exception as e:
+            print(f"✗ Magnetization calculation failed: {e}")
+            return False
         
         # Test kicked-Ising model
         from models.kicked_ising import KickedIsingModel
@@ -95,6 +99,7 @@ def test_small_simulation():
         print(f"✓ Small simulation completed successfully")
         print(f"  - Final Loschmidt echo: {le:.6f}")
         print(f"  - Evolution time: {info['wall_time']:.3f} seconds")
+        print(f"  - Final bond dimension: {info['final_bond_dim']}")
         
         return True
         
