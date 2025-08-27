@@ -1,0 +1,98 @@
+# Time Crystal Quantum Memory - Experimental Parameters
+# 
+# This file contains all physical and numerical parameters for the 
+# "Time Crystals for Quantum Memories: A Tensor-Network Approach" paper.
+# 
+# Format: PARAMETER_NAME = VALUE  # Description [Reference]
+
+# =============================================================================
+# PHYSICAL PARAMETERS
+# =============================================================================
+
+# Ising coupling strength (sets energy scale)
+J = 1.0  # Standard normalization in Floquet-Ising DTC work [link.aps.org]
+
+# X-kick angle (π-pulse strength) 
+THETA = 3.14159265359  # π - Exact spin-flip stabilizes rigid period-doubling [nature.com, pmc.ncbi.nlm.nih.gov]
+
+# Full drive period 
+T_DRIVE = 2.0  # T = 2 J^-1, keeps drive in high-frequency "pre-thermal" window [escholarship.org, link.aps.org]
+
+# Random longitudinal field strength
+H_MAX = 0.3  # 0.3 J - MBL-protected DTC lobe collapses near h/J ≈ 0.5 [link.aps.org, bpb-us-e1.wpmucdn.com]
+
+# Markovian dephasing rate
+GAMMA = 1e-3  # 10^-3 J - Open-system analyses show DTC survives for γ/J ≪ 1 [arxiv.org]
+
+# =============================================================================
+# SYSTEM SIZE PARAMETERS
+# =============================================================================
+
+# Chain length for main figures
+N_SITES_FIGURES = 64  # Already representative of thermodynamic limit [arxiv.org]
+
+# Chain length for performance benchmarks  
+N_SITES_BENCHMARKS = 128  # Mirrors recent 127-qubit kicked-Ising simulations [arxiv.org]
+
+# =============================================================================
+# NUMERICAL PARAMETERS
+# =============================================================================
+
+# Maximum bond dimension
+CHI_MAX = 256  # Matches state-of-the-art PEPO/MPS studies [arxiv.org]
+
+# SVD truncation cutoff
+SVD_CUTOFF = 1e-7  # Guarantees discarded weight ≲ 10^-7 over 10^4 periods
+
+# SVD minimum singular value
+SVD_MIN = 1e-12  # Standard TeNPy setting for numerical stability
+
+# =============================================================================
+# SCAN PARAMETERS
+# =============================================================================
+
+# Phase diagram: disorder strength scan range
+H_SCAN_MIN = 0.0    # h/J minimum
+H_SCAN_MAX = 0.8    # h/J maximum (covers MBL transition)
+H_SCAN_POINTS = 25  # Number of h/J points
+
+# Phase diagram: drive period scan range
+T_SCAN_MIN = 0.5    # T*J minimum  
+T_SCAN_MAX = 4.0    # T*J maximum
+T_SCAN_POINTS = 20  # Number of T*J points
+
+# Evolution time for phase diagram points
+N_PERIODS_PHASE = 150  # Evolution periods per phase diagram point
+
+# Evolution time for memory fidelity benchmarks
+N_PERIODS_MEMORY = 300  # Evolution periods for Loschmidt echo
+
+# Evolution time for performance benchmarks
+N_PERIODS_PERFORMANCE = 200  # Evolution periods for TEBD vs TDVP
+
+# =============================================================================
+# DEPHASING SCAN VALUES
+# =============================================================================
+
+# Dephasing rates for memory fidelity comparison (γ/J values)
+GAMMA_VALUES = [0.0, 1e-4, 1e-3, 1e-2]  # From no dephasing to strong dephasing
+
+# =============================================================================
+# PERFORMANCE BENCHMARK SYSTEM SIZES
+# =============================================================================
+
+# System sizes for TEBD vs TDVP comparison (integers)
+BENCHMARK_SIZES = [160, 180, 200, 220, 240]  # Range for algorithm comparison at larger scales
+
+# =============================================================================
+# OUTPUT PARAMETERS
+# =============================================================================
+
+# Figure resolution
+DPI = 300  # High resolution for publication
+
+# Figure formats (strings - parsed as list of strings)
+SAVE_FORMATS = png,pdf  # Both raster and vector formats
+
+# Random seed for reproducibility
+RANDOM_SEED = 42  # Fixed seed for disorder generation 

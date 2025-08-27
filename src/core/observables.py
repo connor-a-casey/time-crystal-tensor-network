@@ -345,3 +345,144 @@ def participation_ratio(psi: MPS) -> float:
     denominator = np.sum(local_amplitudes**2)
     
     return numerator / denominator if denominator > 0 else 0.0 
+
+
+def staggered_magnetization(psi: MPS) -> float:
+    """
+    Calculate staggered magnetization for discrete time crystal detection.
+    
+    Staggered magnetization is defined as:
+    M_s = (1/N) * Σ_i (-1)^i * ⟨σ_i^z⟩
+    
+    Args:
+        psi: MPS state
+    
+    Returns:
+        Staggered magnetization value
+    """
+    staggered_mag = 0.0
+    
+    for i in range(psi.L):
+        site_mag = magnetization(psi, 'z', site=i)
+        staggered_mag += ((-1)**i) * site_mag
+    
+    return staggered_mag / psi.L
+
+
+def extract_subharmonic_amplitude_from_loschmidt(times: np.ndarray, loschmidt_echoes: np.ndarray, period: float) -> float:
+    """
+    Extract subharmonic amplitude from Loschmidt echo oscillations.
+    
+    For discrete time crystals, the Loschmidt echo itself shows period-doubling.
+    
+    Args:
+        times: Array of time points
+        loschmidt_echoes: Array of Loschmidt echo values
+        period: Drive period T
+    
+    Returns:
+        Sub-harmonic amplitude A2T (normalized)
+    """
+    if len(times) < 10 or len(loschmidt_echoes) < 10:
+        return 0.0
+    
+    # Remove any NaN or infinite values
+    valid_mask = np.isfinite(loschmidt_echoes) & np.isfinite(times)
+    if np.sum(valid_mask) < 10:
+        return 0.0
+    
+    times_clean = times[valid_mask]
+    le_clean = loschmidt_echoes[valid_mask]
+    
+    # Ensure uniform time spacing for FFT
+    dt = np.mean(np.diff(times_clean))
+    if dt <= 0:
+        return 0.0
+    
+    # Remove DC component
+    le_centered = le_clean - np.mean(le_clean)
+    
+    # Apply window function to reduce spectral leakage
+    window = np.hanning(len(le_centered))
+    le_windowed = le_centered * window
+    
+    # Compute FFT
+    fft_result = np.fft.fft(le_windowed)
+    freqs = np.fft.fftfreq(len(le_windowed), d=dt)
+    
+    # Only consider positive frequencies
+    positive_freq_mask = freqs > 0
+    freqs_pos = freqs[positive_freq_mask]
+    fft_pos = fft_result[positive_freq_mask]
+    
+    # Target frequencies
+    fundamental_freq = 1.0 / period  # ω = 2π/T
+    subharmonic_freq = fundamental_freq / 2.0  # ω/2 = π/T
+    
+    # Find closest frequency bins
+    if len(freqs_pos) == 0:
+        return 0.0
+    
+    # Find subharmonic peak
+    subharm_idx = np.argmin(np.abs(freqs_pos - subharmonic_freq))
+    
+    # Get amplitude at subharmonic frequency
+    subharmonic_amplitude = np.abs(fft_pos[subharm_idx])
+    
+    # Normalize by the maximum amplitude in the spectrum for stability
+    max_amplitude = np.max(np.abs(fft_pos))
+    if max_amplitude > 1e-12:
+        normalized_amplitude = subharmonic_amplitude / max_amplitude
+    else:
+        normalized_amplitude = 0.0
+    
+    return float(normalized_amplitude)
+
+
+def detect_period_doubling_from_loschmidt(loschmidt_echoes: List[float], tolerance: float = 0.1) -> float:
+    """
+    Detect period-doubling behavior from Loschmidt echo pattern.
+    
+    For perfect discrete time crystals, the Loschmidt echo should alternate
+    between high and low values with period 2T.
+    
+    Args:
+        loschmidt_echoes: List of Loschmidt echo values
+        tolerance: Tolerance for detecting alternating pattern
+    
+    Returns:
+        Period-doubling strength (0 to 1)
+    """
+    if len(loschmidt_echoes) < 4:
+        return 0.0
+    
+    le_array = np.array(loschmidt_echoes)
+    
+    # Check for alternating pattern
+    even_indices = le_array[::2]  # Even time steps
+    odd_indices = le_array[1::2]  # Odd time steps
+    
+    if len(even_indices) < 2 or len(odd_indices) < 2:
+        return 0.0
+    
+    # Calculate consistency of even and odd values
+    even_std = np.std(even_indices)
+    odd_std = np.std(odd_indices)
+    
+    # Check if even and odd values are well-separated
+    even_mean = np.mean(even_indices)
+    odd_mean = np.mean(odd_indices)
+    separation = abs(even_mean - odd_mean)
+    
+    # Period-doubling strength based on separation and consistency
+    max_separation = max(even_mean, odd_mean)
+    if max_separation > 0:
+        strength = separation / max_separation
+        
+        # Penalize if there's too much variation within even or odd groups
+        consistency_penalty = min(even_std, odd_std) / (separation + 1e-10)
+        strength *= np.exp(-consistency_penalty)
+        
+        return min(strength, 1.0)
+    
+    return 0.0 
