@@ -8,8 +8,8 @@
 # Discrete Time Crystals for Quantum Memories: A Tensor-Network Approach
 ![Paper Status](https://img.shields.io/badge/paper-published-yellow)
 ![Tests](https://img.shields.io/badge/tests-49%20passing-brightgreen)
-![Code Size](https://img.shields.io/github/languages/code-size/ccasey/time-crystal-tensor-network)
-![Repo Size](https://img.shields.io/github/repo-size/ccasey/time-crystal-tensor-network)
+![Code Size](https://img.shields.io/github/languages/code-size/connor-a-casey/time-crystal-tensor-network)
+![Repo Size](https://img.shields.io/github/repo-size/connor-a-casey/time-crystal-tensor-network)
 [![Parameters Documented](https://img.shields.io/badge/parameters-documented-blue)](config.txt)
 
 ## Abstract
