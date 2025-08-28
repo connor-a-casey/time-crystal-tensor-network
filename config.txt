@@ -23,7 +23,7 @@ T_DRIVE = 2.0  # T = 2 J^-1, keeps drive in high-frequency "pre-thermal" window 
 H_MAX = 0.3  # 0.3 J - MBL-protected DTC lobe collapses near h/J ≈ 0.5 [tbd]
 
 # Markovian dephasing rate
-GAMMA = 1e-3  # 10^-3 J - Open-system analyses show DTC survives for γ/J ≪ 1 [arxiv.org]
+GAMMA = 1e-3  # 10^-3 J - open-system analyses show DTC survives for γ/J ≪ 1 [Nano Lett. 22, 4445–4451 (2022), https://doi.org/10.1021/acs.nanolett.2c01585]
 
 # =============================================================================
 # SYSTEM SIZE PARAMETERS
