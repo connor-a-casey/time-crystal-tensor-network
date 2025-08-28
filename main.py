@@ -494,7 +494,8 @@ def generate_phase_diagram(params: Dict) -> Tuple[plt.Figure, plt.Axes]:
     
     # Add colorbar
     cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cbar.set_label(r'DTC Order Parameter $A_{2T}$', rotation=270, labelpad=25, fontsize=16)
+    cbar.set_label(r'DTC Order Parameter $A_{2T}$', rotation=270, labelpad=25, fontsize=18)
+    cbar.ax.tick_params(labelsize=16)
     
     # Add contour lines
     if np.max(A2T_matrix) > 0.1:
@@ -529,11 +530,14 @@ def generate_phase_diagram(params: Dict) -> Tuple[plt.Figure, plt.Axes]:
     
     # Add guide lines
     ax.axvline(x=0.5, color='red', linestyle=':', alpha=0.6, linewidth=1)
-    ax.text(0.52, 3.7, 'MBL transition', fontsize=14, color='red', rotation=90, va='top')
+    ax.text(0.52, 3.7, 'MBL transition', fontsize=16, color='red', rotation=90, va='top')
     
     # Labels (no title)
-    ax.set_xlabel(r'Disorder strength $h/J$')
-    ax.set_ylabel(r'Drive period $T \cdot J$')
+    ax.set_xlabel(r'Disorder strength $h/J$', fontsize=18)
+    ax.set_ylabel(r'Drive period $T \cdot J$', fontsize=18)
+    
+    # Set tick label sizes to match
+    ax.tick_params(axis='both', which='major', labelsize=16)
     
     plt.tight_layout()
     
