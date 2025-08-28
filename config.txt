@@ -1,25 +1,26 @@
 # Time Crystal Quantum Memory - Experimental Parameters
 # 
-# This file contains all physical and numerical parameters for the 
-# "Time Crystals for Quantum Memories: A Tensor-Network Approach" paper.
+# This file contains all physical and numerical parameters as well as the 
+# citations used throughout the paper for the parameters.
 # 
-# Format: PARAMETER_NAME = VALUE  # Description [Reference]
+# Format: PARAMETER_NAME = VALUE  # Description
 
 # =============================================================================
 # PHYSICAL PARAMETERS
 # =============================================================================
 
 # Ising coupling strength (sets energy scale)
-J = 1.0  # Standard normalization in Floquet-Ising DTC work [link.aps.org]
+J = 1.0  # normalization in Floquet-Ising DTC work [arxiv:2205.04865] (denoted as Jτ)
+# also in example TEBD example: https://tenpy.readthedocs.io/en/v1.0.4/notebooks/00_tebd.html
 
-# X-kick angle (π-pulse strength) 
-THETA = 3.14159265359  # π - Exact spin-flip stabilizes rigid period-doubling [nature.com, pmc.ncbi.nlm.nih.gov]
+# X-kick angle (π-pulse strength)
+THETA = 3.14159265359  # π - exact spin-flip stabilizes period-doubling [Phys. Rev. X 13, 041016 (2023), https://doi.org/10.1103/PhysRevX.13.041016]
 
 # Full drive period 
-T_DRIVE = 2.0  # T = 2 J^-1, keeps drive in high-frequency "pre-thermal" window [escholarship.org, link.aps.org]
+T_DRIVE = 2.0  # T = 2 J^-1, keeps drive in high-frequency "pre-thermal" window [tbd]
 
 # Random longitudinal field strength
-H_MAX = 0.3  # 0.3 J - MBL-protected DTC lobe collapses near h/J ≈ 0.5 [link.aps.org, bpb-us-e1.wpmucdn.com]
+H_MAX = 0.3  # 0.3 J - MBL-protected DTC lobe collapses near h/J ≈ 0.5 [tbd]
 
 # Markovian dephasing rate
 GAMMA = 1e-3  # 10^-3 J - Open-system analyses show DTC survives for γ/J ≪ 1 [arxiv.org]
@@ -29,23 +30,23 @@ GAMMA = 1e-3  # 10^-3 J - Open-system analyses show DTC survives for γ/J ≪ 1 
 # =============================================================================
 
 # Chain length for main figures
-N_SITES_FIGURES = 64  # Already representative of thermodynamic limit [arxiv.org]
+N_SITES_FIGURES = 64  # represents the thermodynamic limit [Phys. Rev. B 73, 014411 (2006), https://doi.org/10.1103/PhysRevB.73.014411]
 
 # Chain length for performance benchmarks  
-N_SITES_BENCHMARKS = 128  # Mirrors recent 127-qubit kicked-Ising simulations [arxiv.org]
+N_SITES_BENCHMARKS = 128  # mirrors recent 127-qubit kicked-Ising simulations [PRX Quantum 5, 010308 (2024), https://doi.org/10.1103/PRXQuantum.5.010308]
 
 # =============================================================================
 # NUMERICAL PARAMETERS
 # =============================================================================
 
 # Maximum bond dimension
-CHI_MAX = 256  # Matches state-of-the-art PEPO/MPS studies [arxiv.org]
+CHI_MAX = 256  # matches other MPS studies [tbd]
 
 # SVD truncation cutoff
-SVD_CUTOFF = 1e-7  # Guarantees discarded weight ≲ 10^-7 over 10^4 periods
+SVD_CUTOFF = 1e-7  # guarantees discarded weight ≲ 1e-8 over the periods [Phys. Rev. B 110, 075149 (2024), https://doi.org/10.1103/PhysRevB.110.075149]
 
 # SVD minimum singular value
-SVD_MIN = 1e-12  # Standard TeNPy setting for numerical stability
+SVD_MIN = 1e-12  # standard TeNPy setting from example notebook [https://tenpy.readthedocs.io/en/v1.0.4/notebooks/00_tebd.html]
 
 # =============================================================================
 # SCAN PARAMETERS
@@ -64,35 +65,26 @@ T_SCAN_POINTS = 20  # Number of T*J points
 # Evolution time for phase diagram points
 N_PERIODS_PHASE = 150  # Evolution periods per phase diagram point
 
-# Evolution time for memory fidelity benchmarks
-N_PERIODS_MEMORY = 300  # Evolution periods for Loschmidt echo
-
-# Evolution time for performance benchmarks
-N_PERIODS_PERFORMANCE = 200  # Evolution periods for TEBD vs TDVP
+# Additional evolution parameters for specialized analysis
+# (Currently unused - reserved for future extensions)
 
 # =============================================================================
-# DEPHASING SCAN VALUES
+# ANALYSIS PARAMETERS (CURRENTLY UNUSED)
 # =============================================================================
 
-# Dephasing rates for memory fidelity comparison (γ/J values)
-GAMMA_VALUES = [0.0, 1e-4, 1e-3, 1e-2]  # From no dephasing to strong dephasing
-
-# =============================================================================
-# PERFORMANCE BENCHMARK SYSTEM SIZES
-# =============================================================================
-
-# System sizes for TEBD vs TDVP comparison (integers)
-BENCHMARK_SIZES = [160, 180, 200, 220, 240]  # Range for algorithm comparison at larger scales
+# Reserved for future analysis extensions
+# GAMMA_VALUES = [0.0, 1e-4, 1e-3, 1e-2]  # Dephasing rates for specialized analysis
+# BENCHMARK_SIZES = [160, 180, 200, 220, 240]  # System sizes for performance studies
 
 # =============================================================================
 # OUTPUT PARAMETERS
 # =============================================================================
 
 # Figure resolution
-DPI = 300  # High resolution for publication
+DPI = 300  
 
 # Figure formats (strings - parsed as list of strings)
-SAVE_FORMATS = png,pdf  # Both raster and vector formats
+SAVE_FORMATS = png,pdf 
 
 # Random seed for reproducibility
 RANDOM_SEED = 42  # Fixed seed for disorder generation 
