@@ -1,0 +1,83 @@
+# Time Crystal for Quantum Memory - Experimental Parameters
+# 
+# This file contains all physical and numerical parameters as well as the 
+# citations used throughout the paper for the parameters.
+# Note: Not all of these values are directly linked, see main.py for hard-coded values
+# 
+# Format: PARAMETER_NAME = VALUE  # Description
+
+# =============================================================================
+# PHYSICAL PARAMETERS
+# =============================================================================
+
+# Ising coupling strength (sets energy scale)
+J = 1.0  # normalization in Floquet-Ising DTC work [arxiv:2205.04865] (denoted as Jτ)
+# also in example TEBD example: https://tenpy.readthedocs.io/en/v1.0.4/notebooks/00_tebd.html
+
+# X-kick angle (π-pulse strength)
+THETA = 3.14159265359  # π - exact spin-flip stabilizes period-doubling [Phys. Rev. X 13, 041016 (2023), https://doi.org/10.1103/PhysRevX.13.041016]
+
+# Full drive period 
+T_DRIVE = 2.0  # T = 2 J^-1, keeps drive frequency high [https://link.aps.org/accepted/10.1103/PhysRevB.103.054305]
+
+# Random longitudinal field strength
+H_MAX = 0.3  # conservative choice: within parameter regimes where MBL DTC order is observed;
+             # larger h/J melts the 2T subharmonic response, with the exact boundary depending
+             # on drive error ε, period, and disorder distribution (see Yao PRL 2017; Penner PRB 2025; Zaletel RMP 2023).
+
+
+# Markovian dephasing rate
+GAMMA = 1e-3  # 10^-3 J - open-system analyses show DTC survives for γ/J ≪ 1 [Nano Lett. 22, 4445–4451 (2022), https://doi.org/10.1021/acs.nanolett.2c01585]
+
+# =============================================================================
+# SYSTEM SIZE PARAMETERS
+# =============================================================================
+
+# Chain length for main figures
+N_SITES_FIGURES = 64  # represents the thermodynamic limit [Phys. Rev. B 73, 014411 (2006), https://doi.org/10.1103/PhysRevB.73.014411]
+
+# Chain length for performance benchmarks (to be used in future work)  
+N_SITES_BENCHMARKS = 128  # mirrors recent 127-qubit kicked-Ising simulations [PRX Quantum 5, 010308 (2024), https://doi.org/10.1103/PRXQuantum.5.010308]
+
+# =============================================================================
+# NUMERICAL PARAMETERS
+# =============================================================================
+
+# Maximum bond dimension
+CHI_MAX = 256  # matches other TN studies [Physical Review X 11, 021040 (2021), https://journals.aps.org/prx/pdf/10.1103/PhysRevX.11.021040]
+
+# SVD truncation cutoff
+SVD_CUTOFF = 1e-7  # guarantees discarded weight ≲ 1e-8 over the periods [Phys. Rev. B 110, 075149 (2024), https://doi.org/10.1103/PhysRevB.110.075149]
+
+# SVD minimum singular value
+SVD_MIN = 1e-12  # standard TeNPy setting from example notebook [https://tenpy.readthedocs.io/en/v1.0.4/notebooks/00_tebd.html]
+
+# =============================================================================
+# SCAN PARAMETERS
+# =============================================================================
+
+# Phase diagram: disorder strength scan range
+H_SCAN_MIN = 0.0    # h/J minimum
+H_SCAN_MAX = 0.8    # h/J maximum (covers MBL transition)
+H_SCAN_POINTS = 25  # Number of h/J points
+
+# Phase diagram: drive period scan range
+T_SCAN_MIN = 0.5    # T*J minimum  
+T_SCAN_MAX = 4.0    # T*J maximum
+T_SCAN_POINTS = 20  # Number of T*J points
+
+# Evolution time for phase diagram points
+N_PERIODS_PHASE = 150  # Evolution periods per phase diagram point
+
+# =============================================================================
+# OUTPUT PARAMETERS
+# =============================================================================
+
+# Figure resolution
+DPI = 300  
+
+# Figure formats (strings - parsed as list of strings)
+SAVE_FORMATS = png,pdf 
+
+# Random seed for reproducibility
+RANDOM_SEED = 42  # Fixed seed for disorder generation (hard-coded from RNG)

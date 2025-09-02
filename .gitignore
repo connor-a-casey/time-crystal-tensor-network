@@ -1,0 +1,40 @@
+# python files
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.egg
+
+# build
+build/
+dist/
+*.log
+
+# environment variables
+.env
+.venv
+env/
+venv/
+
+# testing files 
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs files
+.idea/
+.vscode/
+
+# os
+.DS_Store
+Thumbs.db
+*~
+
+# temporary files
+*.bak
+*.tmp 
+
+#figure output
+figures/
+
+
