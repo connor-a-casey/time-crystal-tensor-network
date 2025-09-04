@@ -61,7 +61,8 @@ time-crystal-tensor-network/
 ### Prerequisites
 - Python 3.8+
 - NumPy, SciPy, matplotlib
-- TensorFlow or PyTorch (for tensor operations)
+- Tenpy
+- Qutip
 
 ### Quick Start
 ```bash
