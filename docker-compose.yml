@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  time-crystal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: time-crystal-tensor-network
+    container_name: time-crystal-tensor-network
+    volumes:
+      # Mount figures directory to persist generated figures
+      - ./figures:/app/figures
+      # Optional: mount source code for development
+      # - ./src:/app/src
+      # - ./main.py:/app/main.py
+      # - ./config.txt:/app/config.txt
+    working_dir: /app
+    # Override default command to keep container running
+    command: tail -f /dev/null
+    # Or use specific commands:
+    # command: python main.py
+    # command: python tests/run_tests.py
+

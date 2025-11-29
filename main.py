@@ -494,7 +494,7 @@ def generate_phase_diagram(params: Dict) -> Tuple[plt.Figure, plt.Axes]:
     
     # add colorbar
     cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cbar.set_label(r'DTC Order Parameter $A_{2T}$', rotation=270, labelpad=25, fontsize=18)
+    cbar.set_label(r'DTC Order Parameter $\Phi$', rotation=270, labelpad=25, fontsize=18)
     cbar.ax.tick_params(labelsize=16)
     
     # add contour lines
